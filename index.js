@@ -1,20 +1,17 @@
 var Oreo = require('oreo')
 var thunkify = require('thunkify')
-var co = require('co')
-
+var row = require('./row')
 var methods = {
   main: ['execute', 'discover'],
   table: ['find', 'findOne', 'get', 'insert', 'mget', 'save'],
   row: ['hydrate', 'save', 'update']
 }
 
+module.exports = oreo
 
-module.exports = wrap
-
-
-function wrap(config){
-  if (!(this instanceof wrap)) {
-    return new wrap(config)
+function oreo(config){
+  if (!(this instanceof oreo)) {
+    return new oreo(config)
   }
 
   var self = this
@@ -34,6 +31,12 @@ function wrap(config){
         codb[table] = {}
         methods.table.forEach(function(method) {
           codb[table][method] = thunkify(db[table][method].bind(db[table]))
+
+          console.log(table, method)
+          console.log('ir1:', codb[table].instantiateRow)
+          codb[table].instantiateRow = row.bind(db[table])
+          console.log('ir2:', codb[table].instantiateRow)
+
         })
       })
 

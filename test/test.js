@@ -93,7 +93,7 @@ platforms.forEach(function(config) {
       co(function*() {
         var author = yield db.authors.get(1)
         var new_name = 'Jim Kerouac'
-        console.log('author:', author)
+        console.log('author.update:', author.update)
         author = yield author.update({
           name: new_name
         })
